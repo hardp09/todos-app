@@ -20,7 +20,6 @@ tools {
                 }
             }
         }
-
 	tools {
     nodejs "nodejs"
 }
