@@ -1,43 +1,28 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Install Packages') {
-            steps {
-                script {
-                    sh 'yarn install'
-                }
-            }
-        }
-tools {
-    nodejs "nodejs"
-}
-        stage('Run the App') {
-            steps {
-                script {
-                    sh 'yarn start &'
-                    sleep 5
-                }
-            }
-        }
-	tools {
-    nodejs "nodejs"
-}
-
-        stage('Visit /health route') {
-            steps {
-                script {
-                    sh 'curl http://localhost:3000/health'
-                }
-            }
-        }
-
-        stage('Cleanup') {
-            steps {
-                script {
-                    sh 'pkill -f "node"'
-                }
-            }
-        }
+  agent any
+    
+  tools {nodejs "node"}
+    
+  stages {
+        
+    stage('Git') {
+      steps {
+        git 'https://github.com/hardp09/todos-app'
+      }
     }
+     
+    stage('Build') {
+      steps {
+        sh 'npm install'
+         sh '<<Build Command>>'
+      }
+    }  
+    
+            
+    stage('Test') {
+      steps {
+        sh 'node test'
+      }
+    }
+  }
 }
