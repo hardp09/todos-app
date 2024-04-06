@@ -7,7 +7,7 @@ pipeline {
         
     stage('Git') {
       steps {
-        git 'https://github.com/hardp09/todos-app'
+        git https://github.com/hardp09/todos-app.git todos-app
       }
     }
      
