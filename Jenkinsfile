@@ -9,7 +9,9 @@ pipeline {
                 }
             }
         }
-
+tools {
+    nodejs "nodejs"
+}
         stage('Run the App') {
             steps {
                 script {
@@ -35,7 +37,4 @@ pipeline {
             }
         }
     }
-}
-tools {
-    nodejs "nodejs"
 }
