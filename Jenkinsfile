@@ -26,7 +26,9 @@ pipeline {
                 }
             }
         }
-
+tools {
+    nodejs "nodejs"
+}
         stage('Cleanup') {
             steps {
                 script {
