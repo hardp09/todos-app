@@ -52,7 +52,7 @@ pipeline {
 
         stage('Deploy') {
                 environment {
-                    DEPLOY_SSH_KEY = credentials('ubuntu')
+                    DEPLOY_SSH_KEY = credentials('AWS_INSTANCE_SSH')
                 }
 
                 steps {
