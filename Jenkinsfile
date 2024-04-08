@@ -52,7 +52,7 @@ pipeline {
 
         stage('Deploy') {
                 environment {
-                    DEPLOY_SSH_KEY = credentials('/var/lib/jenkins/.ssh/id_rsa')
+                    DEPLOY_SSH_KEY = credentials('/home/ubuntu/.ssh/id_rsa')
                 }
 
                 steps {
