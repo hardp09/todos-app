@@ -52,12 +52,12 @@ pipeline {
 
         stage('Deploy') {
                 environment {
-                    DEPLOY_SSH_KEY = credentials('ubuntu@13.201.117.64')
+                    DEPLOY_SSH_KEY = credentials('jenkins@13.201.117.64')
                 }
 
                 steps {
                     sh '''
-                        ssh -v -i $DEPLOY_SSH_KEY jenkins@13.201.117.64
+                        ssh -v -i $DEPLOY_SSH_KEY ubuntu@13.201.117.64
                             
                             if [ ! -d "todos-app" ]; then
                                 git clone https://github.com/hardp09/todos-app.git todos-app
