@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        ssh-keyscan -H 13.201.117.64 >> /var/lib/jenkins/.ssh/known_hosts
+                        ssh-keyscan 13.201.117.64 >> /var/lib/jenkins/.ssh/known_hosts
                     '''
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
 
         stage('Deploy') {
                 environment {
-                    DEPLOY_SSH_KEY = credentials('ubuntu@13.201.117.64')
+                    DEPLOY_SSH_KEY = credentials('13.201.117.64')
                 }
 
                 steps {
