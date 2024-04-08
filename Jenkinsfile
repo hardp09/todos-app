@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        ssh-keyscan 13.201.117.64 >> /var/lib/jenkins/.ssh/known_hosts
+                        ssh-keyscan -H 13.201.117.64 >> /var/lib/jenkins/.ssh/known_hosts
                     '''
                 }
             }
