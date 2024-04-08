@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        ssh-keyscan 13.201.117.64 >> /var/lib/jenkins/.ssh/known_hosts
+                        ssh-keyscan 13.201.117.64 >> /home/ubuntu/.ssh/known_hosts
                     '''
                 }
             }
@@ -52,12 +52,12 @@ pipeline {
 
         stage('Deploy') {
                 environment {
-                    DEPLOY_SSH_KEY = credentials('/var/lib/jenkins/.ssh/id_rsa')
+                    DEPLOY_SSH_KEY = credentials('/home/ubuntu/.ssh/id_rsa')
                 }
 
                 steps {
                     sh '''
-                        ssh -v -i $DEPLOY_SSH_KEY jenkins@13.201.117.64:/home/jenkins/
+                        ssh -v -i $DEPLOY_SSH_KEY ubuntu@13.201.117.64:/home/ubuntu/
                             
                             if [ ! -d "todos-app" ]; then
                                 git clone https://github.com/hardp09/todos-app.git todos-app
