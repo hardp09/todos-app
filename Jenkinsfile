@@ -1,28 +1,83 @@
+#latest
 pipeline {
-  agent any
+    agent any
     
-  tools {nodejs "node"}
-    
-  stages {
-        
-    stage('Git') {
-      steps {
-        git 'https://github.com/hardp09/todos-app'
-      }
+    tools {
+        nodejs "nodejs"
     }
-     
-    stage('Build') {
-      steps {
-        sh 'npm install'
-         sh '<<Build Command>>'
-      }
-    }  
-    
-            
-    stage('Test') {
-      steps {
-        sh 'node test'
-      }
+
+
+    stages {
+        stage('Install Packages') {
+            steps {
+                script {
+                    sh 'yarn install'
+                }
+            }
+        }
+
+        stage('Run the App') {
+            steps {
+                script {
+                    sh 'yarn start:pm2'
+                    sleep 5
+                }
+            }
+        }
+
+        stage('Test the app') {
+            steps {
+                script {
+                    sh 'curl http://localhost:3000/health'
+                }
+            }
+        }
+
+        stage('Stop the App') {
+            steps {
+                script {
+                    sh 'pm2 stop todos-app'
+                }
+            }
+        }  
+
+        stage('Add Host to known_hosts') {
+            steps {
+                script {
+                    sh '''
+                        ssh-keyscan 13.201.117.64 >> /home/ubuntu/.ssh/known_hosts
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+                environment {
+                    DEPLOY_SSH_KEY = credentials('/home/ubuntu/.ssh/id_rsa')
+                }
+
+                steps {
+                    sh '''
+                        ssh -v -i $DEPLOY_SSH_KEY ubuntu@13.201.117.64:/home/ubuntu/
+                            
+                            if [ ! -d "todos-app" ]; then
+                                git clone https://github.com/hardp09/todos-app.git todos-app
+                                cd todos-app
+                            else
+                                cd todos-app
+                                git pull
+                            fi
+
+                            yarn install
+                            
+                            if pm2 describe todos-app > /dev/null ; then
+                            pm2 restart todos-app
+                            else
+                                yarn start:pm2
+                            fi
+                        '
+                    '''
+                }
+            }
     }
-  }
 }
