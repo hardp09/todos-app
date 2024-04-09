@@ -1,4 +1,3 @@
-#latest
 pipeline {
     agent any
     
@@ -45,7 +44,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        ssh-keyscan 13.201.117.64 >> /home/ubuntu/.ssh/known_hosts
+                        ssh-keyscan -H $PRODUCTION_IP_ADRESSS >> /var/lib/jenkins/.ssh/known_hosts
                     '''
                 }
             }
@@ -53,15 +52,15 @@ pipeline {
 
         stage('Deploy') {
                 environment {
-                    DEPLOY_SSH_KEY = credentials('/home/ubuntu/.ssh/id_rsa')
+                    DEPLOY_SSH_KEY = credentials('AWS_INSTANCE_SSH')
                 }
 
                 steps {
                     sh '''
-                        ssh -v -i $DEPLOY_SSH_KEY ubuntu@13.201.117.64:/home/ubuntu/
+                        ssh -v -i $DEPLOY_SSH_KEY ubuntu@$PRODUCTION_IP_ADRESSS '
                             
                             if [ ! -d "todos-app" ]; then
-                                git clone https://github.com/hardp09/todos-app.git todos-app
+                                git clone https://github.com/AhmadMazaal/todos-app.git todos-app
                                 cd todos-app
                             else
                                 cd todos-app
